@@ -115,7 +115,3 @@ This project was developed as part of the **Marketing Mojito Web Developer Inter
 Distributed under the MIT License.
 
 ---
-
-<p align="center">
-  Developed with ❤️ by the Marketing Mojito Engineering Team
-</p>
