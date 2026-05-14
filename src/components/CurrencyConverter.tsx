@@ -24,7 +24,7 @@ export default function CurrencyConverter({ totalUSD }: CurrencyConverterProps) 
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/fx-api/latest?from=USD');
+      const response = await fetch('https://api.frankfurter.app/latest?from=USD');
       if (!response.ok) throw new Error('Update failed');
       const data = await response.json();
       setRates({ ...data.rates, USD: 1 });
