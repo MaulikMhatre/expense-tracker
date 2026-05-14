@@ -20,22 +20,27 @@ export default function CurrencyConverter({ totalUSD }: CurrencyConverterProps) 
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
-  const fetchRates = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('https://api.frankfurter.app/latest?from=USD');
-      if (!response.ok) throw new Error('Update failed');
-      const data = await response.json();
-      setRates({ ...data.rates, USD: 1 });
-      setLastUpdated(new Date().toLocaleTimeString('en-GB'));
-    } catch (err: any) {
-      setError('Live updates offline');
-      setRates({ EUR: 0.92, GBP: 0.79, INR: 83.45, USD: 1 });
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+ const fetchRates = useCallback(async () => {
+  setLoading(true);
+  setError(null);
+  try {
+    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://api.frankfurter.app/latest?from=USD')}`);
+    
+    if (!res.ok) throw new Error('Update failed');
+    
+    const proxyData = await res.json();
+    const data = JSON.parse(proxyData.contents); 
+    
+    setRates({ ...data.rates, USD: 1 });
+    setLastUpdated(new Date().toLocaleTimeString('en-GB'));
+  } catch (err) {
+    setError('Live updates offline');
+    setRates({ EUR: 0.92, GBP: 0.79, INR: 83.45, USD: 1 });
+    console.warn("Using fallback rates due to API/CORS issue.");
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   useEffect(() => {
     fetchRates();
